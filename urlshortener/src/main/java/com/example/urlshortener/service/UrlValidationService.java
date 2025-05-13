@@ -27,16 +27,18 @@ public class UrlValidationService {
     public UrlMapping validate(LongUrl longUrl) throws IllegalArgumentException {
         logger.info("Validating URL: {}", longUrl.getUrl());
         validateUrlSyntax(longUrl);
-        verifyUrlReachable(longUrl);
+        // Todo : check if this below function actually works or not.
+//        verifyUrlReachable(longUrl);
         Optional<UrlMapping> urlMapping = urlMappingRepository.findByLongUrl(longUrl.getUrl());
         if(!urlMapping.isEmpty()) {
+            logger.info("URL already exists in the database");
             return urlMapping.get();
         }
         logger.info("URL validation successfull");
         return null;
     }
 
-    public boolean validateUrlSyntax(LongUrl url) {
+    public boolean validateUrlSyntax(LongUrl url) throws IllegalArgumentException {
         String originalUrl = url.getUrl();
         if (Objects.isNull(url)) {
             throw new IllegalArgumentException("URL cannot be null or empty");
@@ -45,12 +47,7 @@ public class UrlValidationService {
             originalUrl = "https://" + originalUrl;
             url.setUrl(originalUrl);
         }
-        try {
-            new URL(url.getUrl());
-            return true;
-        } catch (MalformedURLException e) {
-            return false;
-        }
+        return true;
     }
 
     public boolean verifyUrlReachable(LongUrl url) {
