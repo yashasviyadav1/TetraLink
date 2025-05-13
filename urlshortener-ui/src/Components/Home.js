@@ -9,20 +9,22 @@ import {
 } from '@mantine/core';
 import {IconLink} from '@tabler/icons-react';
 
+const SHORTENER_BACKEND_HOSTED_URL = process.env.REACT_APP_URL_SHORTENER_BACKEND_HOSTED_URL || 'http://localhost:8080';
+
 function Home() {
     const [originalUrl, setOriginalUrl] = useState('');
     const [shortUrl, setShortUrl] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleGenerate = async () => {
-        if(originalUrl === '') {
+        if (originalUrl === '') {
             alert('Please enter a URL');
             return;
         }
         setLoading(true);
         try {
             const response = await fetch(
-                `${process.env.REACT_APP_URL_SHORTENER_BACKEND_HOSTED_URL}/url?accessToken=${process.env.REACT_APP_URL_SHORTENER_BACKEND_ACCESS_TOKEN}`,
+                `${SHORTENER_BACKEND_HOSTED_URL}/url?accessToken=${process.env.REACT_APP_URL_SHORTENER_BACKEND_ACCESS_TOKEN}`,
                 {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
